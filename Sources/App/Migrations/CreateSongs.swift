@@ -7,15 +7,15 @@
 
 import Fluent
 
-struct CreateSong: Migration {
-	func prepare(on database: FluentKit.Database) -> NIOCore.EventLoopFuture<Void> {
-		return database.schema("songs")
+struct CreateSong: AsyncMigration {
+	func prepare(on database: FluentKit.Database) async throws  {
+		try await database.schema("songs")
 			.id()
 			.field("title", .string, .required)
 			.create()
 	}
 	
-	func revert(on database: FluentKit.Database) -> NIOCore.EventLoopFuture<Void> {
-		return database.schema("songs").delete()
+	func revert(on database: FluentKit.Database) async throws {
+		try await database.schema("songs").delete()
 	}
 }
